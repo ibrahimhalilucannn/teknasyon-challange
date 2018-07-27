@@ -15,8 +15,13 @@ class UserController extends Controller
     public function index(Request $request)
     {
         if (Auth::check()) {
-            $items  = User::where('role',1)->get();
-            return view('user',compact('items'));
+            if (Auth::user()->role == 0) {
+                $items  = User::where('role',1)->get();
+                return view('user',compact('items'));
+            }else{
+                session()->flash('permission', trans('teknasyon/alert.info_warning'));
+                return redirect()->back()->withInput();
+            }
         }
         else{
             return Redirect::to('login');

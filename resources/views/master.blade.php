@@ -146,6 +146,12 @@
     </script>
 @endif
 
+@if (session()->has('permission'))
+    <script type="text/javascript">
+        toastr.error("{{session()->get('permission')}}", "{{trans('teknasyon/alert.info_error')}}");
+    </script>
+@endif
+
 
 </body>
 
