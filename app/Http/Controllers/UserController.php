@@ -32,23 +32,28 @@ class UserController extends Controller
     public function user_insert(Request $request)
     {
         if (Auth::check()) {
-            $email = $request->get('email');
-            $kosul = ['email'=>$email];
-            $user_var_mi = User::user_var_mi($kosul)->count();
+            if (Auth::user()->role == 0) {
+                $email = $request->get('email');
+                $kosul = ['email'=>$email];
+                $user_var_mi = User::user_var_mi($kosul)->count();
 
-            if ($user_var_mi >0) {
-                session()->flash('error', trans('teknasyon/alert.warning'));
-                return redirect()->back()->withInput();
-            }
-            else
-            {
-                $password = bcrypt($request->get('password'));
-                $request->merge([
-                    'password' => $password,
-                    'role' => 1,
-                ]);
-                User::create($request->all());
-                session()->flash('success', trans('teknasyon/alert.insert'));
+                if ($user_var_mi >0) {
+                    session()->flash('error', trans('teknasyon/alert.warning'));
+                    return redirect()->back()->withInput();
+                }
+                else
+                {
+                    $password = bcrypt($request->get('password'));
+                    $request->merge([
+                        'password' => $password,
+                        'role' => 1,
+                    ]);
+                    User::create($request->all());
+                    session()->flash('success', trans('teknasyon/alert.insert'));
+                    return redirect()->back()->withInput();
+                }
+            }else{
+                session()->flash('permission', trans('teknasyon/alert.info_warning'));
                 return redirect()->back()->withInput();
             }
         }
@@ -61,27 +66,31 @@ class UserController extends Controller
     public function user_update(Request $request, $id)
     {
         if (Auth::check()) {
-            $edit = User::find($id);
-            if ($edit->email == $request->get('email')){
-                User::find($id)->update($request->all());
-                session()->flash('update', trans('teknasyon/alert.update'));
-                return redirect()->back()->withInput();
-            }else{
-                $email = $request->get('email');
-                $kosul = ['email'=>$email];
-                $user_var_mi = User::user_var_mi($kosul)->count();
-
-                if ($user_var_mi >0) {
-                    session()->flash('error', trans('teknasyon/alert.danger'));
-                    return redirect()->back()->withInput();
-                }
-                else
-                {
+            if (Auth::user()->role == 0) {
+                $edit = User::find($id);
+                if ($edit->email == $request->get('email')){
                     User::find($id)->update($request->all());
                     session()->flash('update', trans('teknasyon/alert.update'));
                     return redirect()->back()->withInput();
-                }
+                }else{
+                    $email = $request->get('email');
+                    $kosul = ['email'=>$email];
+                    $user_var_mi = User::user_var_mi($kosul)->count();
 
+                    if ($user_var_mi >0) {
+                        session()->flash('error', trans('teknasyon/alert.danger'));
+                        return redirect()->back()->withInput();
+                    }
+                    else
+                    {
+                        User::find($id)->update($request->all());
+                        session()->flash('update', trans('teknasyon/alert.update'));
+                        return redirect()->back()->withInput();
+                    }
+                }
+            }else{
+                session()->flash('permission', trans('teknasyon/alert.info_warning'));
+                return redirect()->back()->withInput();
             }
         }
         else{

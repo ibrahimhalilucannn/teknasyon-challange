@@ -36,15 +36,20 @@ class TeknasyonController extends Controller
 
             $kosul = ['email' => $email];
             $users = User::where($kosul)->first();
+            if($users->status == 0){
+                session()->flash('status_danger', trans('teknasyon/alert.status_danger'));
+                return redirect()->back()->withInput();
+            }else{
+                Session::put('username', $username);
+                Session::put('name', $users->name);
+                Session::put('surname', $users->surname);
+
+                session()->flash('user_login_success', trans('teknasyon/alert.user_login_success'));
+                return Redirect::to('/');
+            }
 
 
-            Session::put('username', $username);
-            Session::put('name', $users->name);
-            Session::put('surname', $users->surname);
 
-            session()->flash('user_login_success', trans('teknasyon/alert.user_login_success'));
-
-            return Redirect::to('/');
         } else {//Girilen bilgiler hatalı yada sisteminiz aktif değil
 
 

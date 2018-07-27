@@ -152,6 +152,12 @@
     </script>
 @endif
 
+@if (session()->has('status_danger'))
+    <script type="text/javascript">
+        toastr.error("{{session()->get('status_danger')}}", "{{trans('teknasyon/alert.info_error')}}");
+    </script>
+@endif
+
 
 </body>
 

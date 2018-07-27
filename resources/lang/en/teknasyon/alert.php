@@ -12,6 +12,7 @@ return [
     'success'               => 'Ekleme işlemi başrılı bir şekilde gerçekleşti. ',
     'update'                => 'Güncelleme işlemi başarılı bir şekilde gerçekleşti',
     'permission'            => 'Erişim yetkiniz yoktur',
+    'status_danger'         => 'Sistemde aktif kullanıcı değilsiniz. Yöneticiniz ile görüşün.',
     'warning'               => 'Girdiğiniz bilgilerde bir veri bulundu. Bilgileri kontrol edip tekrar deneyiniz.',
     'error'                 => 'İşlem sırasında bir hata ile karşılaşıldı.',
     'user_login_success'    => 'Giriş İşleminiz başarıyla gerçekleşti',
